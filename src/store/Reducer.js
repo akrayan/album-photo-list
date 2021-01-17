@@ -7,6 +7,7 @@ const initialState = {
 };
 
 export const ALBUMS_GET = "albums/get";
+export const PHOTOS_GET = "photos/get";
 export const STORE_ERROR = "store/error";
 
 export function albumsReducer(state = initialState, action) {
