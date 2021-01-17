@@ -1,7 +1,7 @@
 
 const initialState = {
     loading: false,
-    albums: [],
+    albumList: [],
     albumSelected: null,
     error: null
   };
@@ -12,7 +12,7 @@ const initialState = {
   export function albumsReducer(state = initialState, action) {
     switch (action.type) {
       case ALBUMS_GET:
-        return { ...state, albums: action.payload, loading: false };
+        return { ...state, albumList: action.payload, loading: false };
       default:
         return state;
     }

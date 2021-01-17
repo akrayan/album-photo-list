@@ -1,0 +1,1 @@
+export const albumsSelector = ({albums}) => albums.albumList
