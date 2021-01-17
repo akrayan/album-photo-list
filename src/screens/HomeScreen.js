@@ -1,6 +1,10 @@
 import React from 'react'
 import { View, Text, Button, TouchableOpacity } from 'react-native'
 
+function navToAlbum(navigation, album) {
+    navigation.navigate("Album", album);
+}
+
 function HomeScreen({ navigation }) {
     return (<View>
         <Text>Home</Text>
