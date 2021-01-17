@@ -1,4 +1,4 @@
-import { ALBUMS_GET, STORE_ERROR } from './Reducer'
+import { ALBUMS_GET, PHOTOS_GET, STORE_ERROR } from './Reducer'
 import axios from 'axios'
 
 export const getAlbumsActionRequest = () => async dispatch => {
@@ -11,6 +11,23 @@ export const getAlbumsActionRequest = () => async dispatch => {
         })
     }
     catch(error){
+        dispatch( {
+            type: STORE_ERROR,
+            payload: error,
+        })
+    }
+}
+
+export const getPhotosActionRequest = (id) => async dispatch => {
+    try{
+        const res = await axios.get("https://jsonplaceholder.typicode.com/photos?albumId=" + id);
+        dispatch( {
+            type: PHOTOS_GET,
+            payload: {id: id, photos: res.data}
+        })
+    }
+    catch(error){
+        console.log("err", error)
         dispatch( {
             type: STORE_ERROR,
             payload: error,

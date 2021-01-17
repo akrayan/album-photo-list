@@ -14,6 +14,15 @@ export function albumsReducer(state = initialState, action) {
   switch (action.type) {
     case ALBUMS_GET:
       return { ...state, albumList: action.payload, loading: false };
+    case PHOTOS_GET:
+      return {
+        ...state, albumList: state.albumList.map(album => {
+          if (action.payload.id == album.id)
+            return { ...album, photos: [...action.payload.photos] }
+          else
+            return album;
+        }), loading: false
+      };
     case STORE_ERROR:
       console.error("STR ERR:", action.payload)
       return { ...state, error: action.payload };
