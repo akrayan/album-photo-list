@@ -1,5 +1,6 @@
 {
   "expo": {
+    "entryPoint": "./src/App.js",
     "name": "album-photo-list",
     "slug": "album-photo-list",
     "version": "1.0.0",
