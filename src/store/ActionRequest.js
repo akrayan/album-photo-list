@@ -20,7 +20,7 @@ export const getAlbumsActionRequest = () => async dispatch => {
 }
 
 export const getPhotosActionRequest = (id) => async dispatch => {
-    dispatch(getPhotosAction);
+    dispatch(getPhotosAction());
     try{
         const res = await axios.get("https://jsonplaceholder.typicode.com/photos?albumId=" + id);
         dispatch( {

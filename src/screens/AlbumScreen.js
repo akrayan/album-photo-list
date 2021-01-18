@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, Image, Button, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, Image, Button, TouchableOpacity, ScrollView, RefreshControl } from 'react-native'
 
 import { getPhotosActionRequest } from "../store/ActionRequest";
-import { albumsSelector } from "../store/Selectors";
+import { albumsSelector, loadingPhotosSelector } from "../store/Selectors";
 
 function navToDetails(navigation, photo) {
     navigation.navigate("Details", photo);
@@ -17,9 +17,9 @@ function PhotoItem({ navigation, photo }) {
      );
 }
 
-function AlbumView({ navigation, photoList }) {
+function AlbumView({ navigation, loading, onRefresh, photoList }) {
     return (
-        <ScrollView>
+        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh}/>}>
             <Text>Album</Text>
             {photoList.length > 0 ?
                 <View>{photoList.map(photo => {
@@ -35,14 +35,17 @@ function AlbumView({ navigation, photoList }) {
 function AlbumScreen({ route, navigation }) {
     const { id, title } = route.params;
     const albumList = useSelector(albumsSelector);
+    const loading = useSelector(loadingPhotosSelector)
     const photoList = albumList.find(album => album.id == id).photos ?? [];
     const dispatch = useDispatch();
     useEffect(() => {
         if (photoList.length == 0)
             dispatch(getPhotosActionRequest(id))
     }, [dispatch])
-
-    return (<AlbumView navigation={navigation} photoList={photoList} />)
+    const onRefresh = useCallback(() => {
+        dispatch(getPhotosActionRequest())
+      }, []);
+    return (<AlbumView navigation={navigation} loading={loading} onRefresh={onRefresh} photoList={photoList} />)
 }
 
 export default AlbumScreen;
