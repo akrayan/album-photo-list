@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, Button, TouchableOpacity, ScrollView, RefreshControl } from 'react-native'
 
+import Container from '../components/Container'
 import { albumsSelector, loadingAlbumsSelector } from "../store/Selectors";
 import { getAlbumsActionRequest } from "../store/ActionRequest";
 
@@ -17,15 +18,20 @@ function AlbumItem({ navigation, album }) {
 }
 
 function HomeView({ navigation, onRefresh, loading, albumList }) {
-    return (<ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh}/>}>
-        <Text>Home</Text>
-        {
-            albumList?.length > 0 ?
-                <View>{albumList.map(album => <AlbumItem key={album.id} navigation={navigation} album={album} />)}</View>
-                : <Text>No Album</Text>
-        }
-        <Button title="go Album" onPress={() => navToAlbum(navigation, { id: 0, title: "lorem" })} />
-    </ScrollView>)
+    return (
+        <Container flex stretch>
+            <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}>
+                <Container flex stretch padding>
+                    <Text>Home</Text>
+                    {
+                        albumList?.length > 0 ?
+                            <View>{albumList.map(album => <AlbumItem key={album.id} navigation={navigation} album={album} />)}</View>
+                            : <Text>No Album</Text>
+                    }
+                </Container>
+            </ScrollView>
+        </Container>
+    )
 }
 
 function HomeScreen({ navigation }) {
@@ -38,8 +44,8 @@ function HomeScreen({ navigation }) {
     }, [dispatch])
     const onRefresh = useCallback(() => {
         dispatch(getAlbumsActionRequest())
-      }, []);
-    return (<HomeView navigation={navigation} onRefresh={onRefresh} loading={loading} albumList={albumList}/>)
+    }, []);
+    return (<HomeView navigation={navigation} onRefresh={onRefresh} loading={loading} albumList={albumList} />)
 }
 
 export default HomeScreen;

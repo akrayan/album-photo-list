@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, Image, Button, TouchableOpacity, ScrollView, RefreshControl } from 'react-native'
 
+import Container from '../components/Container'
 import { getPhotosActionRequest } from "../store/ActionRequest";
 import { albumsSelector, loadingPhotosSelector } from "../store/Selectors";
 
@@ -11,25 +12,29 @@ function navToDetails(navigation, photo) {
 
 function PhotoItem({ navigation, photo }) {
     return (
-            <TouchableOpacity onPress={() => navToDetails(navigation, photo)} >
-                <Image style={{ width: 100, height: 100 }} source={{ uri: photo.url }} onError={({ nativeEvent: {error} }) => console.error("err photo", photo, error)} />
-            </TouchableOpacity>
-     );
+        <TouchableOpacity onPress={() => navToDetails(navigation, photo)} >
+            <Image style={{ width: 100, height: 100 }} source={{ uri: photo.url }} onError={({ nativeEvent: { error } }) => console.log("err photo", error)} />
+        </TouchableOpacity>
+    );
 }
 
 function AlbumView({ navigation, loading, onRefresh, photoList }) {
     return (
-        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh}/>}>
-            <Text>Album</Text>
-            {photoList.length > 0 ?
-                <View>{photoList.map(photo => {
-                    return (
-                        <PhotoItem key={photo.id} navigation={navigation} photo={photo} />)
-                })}
-                </View>
-                : <Text>No Photos</Text>}
-            <Button title="go details" onPress={() => navToDetails(navigation, { id: 76, title: "ipsum" })} />
-        </ScrollView>)
+        <Container flex stretch>
+            <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh} />}>
+                <Container flex stretch padding>
+                    <Text>Album</Text>
+                    {photoList.length > 0 ?
+                        <View>{photoList.map(photo => {
+                            return (
+                                <PhotoItem key={photo.id} navigation={navigation} photo={photo} />)
+                        })}
+                        </View>
+                        : <Text>No Photos</Text>}
+                </Container>
+            </ScrollView>
+        </Container >
+    )
 }
 
 function AlbumScreen({ route, navigation }) {
@@ -44,7 +49,7 @@ function AlbumScreen({ route, navigation }) {
     }, [dispatch])
     const onRefresh = useCallback(() => {
         dispatch(getPhotosActionRequest())
-      }, []);
+    }, []);
     return (<AlbumView navigation={navigation} loading={loading} onRefresh={onRefresh} photoList={photoList} />)
 }
 
