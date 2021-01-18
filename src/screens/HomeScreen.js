@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, Button, TouchableOpacity, ScrollView, RefreshControl, StyleSheet, FlatList } from 'react-native'
 
 import Container from '../components/Container'
-import CustomList from '../components/CustomList'
+
 import { albumsSelector, loadingAlbumsSelector } from "../store/Selectors";
 import { getAlbumsActionRequest } from "../store/ActionRequest";
 import Dimensions from "../constants/Dimensions";
@@ -67,17 +67,6 @@ function HomeView({ navigation, onRefresh, loading, albumList }) {
                 renderItem={({ item }) => AlbumItem({ otherData: navigation, item: item })}
                 keyExtractor={(item) => item.id}
             />
-            {/* 
-            <CustomList
-                refreshing={loading}
-                onRefresh={onRefresh}
-                data={albumList}
-                otherData={navigation}
-                renderItem={AlbumItem}
-                renderEmpty={() => <Text>No Album</Text>}
-                keyExtractor={(item) => item.id}
-            />
-            */}
         </Container>
     )
 }
