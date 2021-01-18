@@ -1,20 +1,48 @@
 import React, { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, Button, TouchableOpacity, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, Button, TouchableOpacity, ScrollView, RefreshControl, StyleSheet } from 'react-native'
 
 import Container from '../components/Container'
 import { albumsSelector, loadingAlbumsSelector } from "../store/Selectors";
 import { getAlbumsActionRequest } from "../store/ActionRequest";
+import Dimensions from "../constants/Dimensions";
+import { colors } from "../constants/Colors";
+
+const itemWidth = ((Dimensions.window.width - 20) / 2) - 10; // Half width - pading - margin
+const itemHeigth = itemWidth * 1.8;
+
+const colorList = [colors.orange, colors.blue, colors.green, colors.skyblue, colors.red, colors.purple]
+
+const styles = StyleSheet.create({ 
+    albumItem : {
+        justifyContent: 'flex-end',
+        height : itemHeigth,
+        width : itemWidth,
+        borderColor: 'dimgrey',
+        borderWidth: 1,
+        borderRadius: 10,
+        margin: 5,
+    },
+    albumTitle : {
+        marginLeft: 10,
+        marginBottom: 10,
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white',
+        textTransform: 'capitalize'
+    }
+});
 
 function navToAlbum(navigation, album) {
     navigation.navigate("Album", album);
 }
 
 function AlbumItem({ navigation, album }) {
-    return (<TouchableOpacity onPress={() => {
-        //onSelect(album.id);
-        navToAlbum(navigation, album);
-    }}><Text>{album.title}</Text></TouchableOpacity>);
+    return (
+            <TouchableOpacity style={{...styles.albumItem, backgroundColor: colorList[album.id % colorList.length]}} onPress={() => navToAlbum(navigation, album)}>
+                <Text style={styles.albumTitle} numberOfLines={1}>{album.title}</Text>
+            </TouchableOpacity>
+    );
 }
 
 function HomeView({ navigation, onRefresh, loading, albumList }) {
