@@ -19,8 +19,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         height: itemHeigth,
         width: itemWidth,
-        borderColor: 'white',
-        borderWidth: 1,
         borderRadius: 5,
         margin: 5,
     },
@@ -44,16 +42,13 @@ function navToAlbum(navigation, album) {
     navigation.navigate("Album", album);
 }
 
-function AlbumItem({ otherData, item }) {
-    let navigation = otherData;
-    let album = item;
+function AlbumItem({ navigation, album }) {
     return (
         <TouchableOpacity style={{ ...styles.albumItem, backgroundColor: colorList[album.id % colorList.length] }} onPress={() => navToAlbum(navigation, album)}>
             <Text style={styles.albumTitle} numberOfLines={1}>{album.title}</Text>
         </TouchableOpacity>
     );
 }
-
 
 function HomeView({ navigation, onRefresh, loading, albumList }) {
     return (
@@ -64,7 +59,7 @@ function HomeView({ navigation, onRefresh, loading, albumList }) {
                 onRefresh={onRefresh}
                 data={albumList}
                 numColumns={2}
-                renderItem={({ item }) => AlbumItem({ otherData: navigation, item: item })}
+                renderItem={({ item }) => AlbumItem({ navigation: navigation, album: item })}
                 keyExtractor={(item) => item.id}
             />
         </Container>
