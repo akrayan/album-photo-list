@@ -1,14 +1,19 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Image, ScrollView } from 'react-native'
 
-function DetailsScreen({route}) {
-    const { id, title } = route.params;
+function DetailsScreen({ route }) {
+    const { id, title, url } = route.params;
 
-    return (<View>
+    return (<ScrollView>
+        <Image
+            style={{height: 600}}
+            source={{uri: url}}
+            onError={({ nativeEvent: {error} }) => console.error("err deital", url, error)}
+        />
         <Text>Details</Text>
         <Text>id : {id}</Text>
         <Text>title : {title}</Text>
-    </View>)
+    </ScrollView>)
 }
 
 export default DetailsScreen;

@@ -1,24 +1,25 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, Image, Button, TouchableOpacity } from 'react-native'
+import { View, Text, Image, Button, TouchableOpacity, ScrollView } from 'react-native'
 
 import { getPhotosActionRequest } from "../store/ActionRequest";
 import { albumsSelector } from "../store/Selectors";
 
-function navToDetails(navigation, pic) {
-    navigation.navigate("Details", pic);
+function navToDetails(navigation, photo) {
+    navigation.navigate("Details", photo);
 }
 
 function PhotoItem({ navigation, photo }) {
     return (
-        <TouchableOpacity onPress={() => navToDetails(navigation, photo)} >
-            <Image style={{ width: 100, height: 100 }} source={{ uri: photo.url }} />
-        </TouchableOpacity>);
+            <TouchableOpacity onPress={() => navToDetails(navigation, photo)} >
+                <Image style={{ width: 100, height: 100 }} source={{ uri: photo.url }} onError={({ nativeEvent: {error} }) => console.error("err photo", photo, error)} />
+            </TouchableOpacity>
+     );
 }
 
 function AlbumView({ navigation, photoList }) {
     return (
-        <View>
+        <ScrollView>
             <Text>Album</Text>
             {photoList.length > 0 ?
                 <View>{photoList.map(photo => {
@@ -28,7 +29,7 @@ function AlbumView({ navigation, photoList }) {
                 </View>
                 : <Text>No Photos</Text>}
             <Button title="go details" onPress={() => navToDetails(navigation, { id: 76, title: "ipsum" })} />
-        </View>)
+        </ScrollView>)
 }
 
 function AlbumScreen({ route, navigation }) {
