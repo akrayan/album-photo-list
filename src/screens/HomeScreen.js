@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, Button, TouchableOpacity } from 'react-native'
+import { View, Text, Button, TouchableOpacity, ScrollView, RefreshControl } from 'react-native'
 
-import { albumsSelector } from "../store/Selectors";
+import { albumsSelector, loadingAlbumsSelector } from "../store/Selectors";
 import { getAlbumsActionRequest } from "../store/ActionRequest";
 
 function navToAlbum(navigation, album) {
@@ -16,8 +16,8 @@ function AlbumItem({ navigation, album }) {
     }}><Text>{album.title}</Text></TouchableOpacity>);
 }
 
-function HomeView({ navigation, albumList }) {
-    return (<View>
+function HomeView({ navigation, onRefresh, loading, albumList }) {
+    return (<ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={onRefresh}/>}>
         <Text>Home</Text>
         {
             albumList?.length > 0 ?
@@ -25,17 +25,21 @@ function HomeView({ navigation, albumList }) {
                 : <Text>No Album</Text>
         }
         <Button title="go Album" onPress={() => navToAlbum(navigation, { id: 0, title: "lorem" })} />
-    </View>)
+    </ScrollView>)
 }
 
 function HomeScreen({ navigation }) {
     const albumList = useSelector(albumsSelector);
+    const loading = useSelector(loadingAlbumsSelector);
     const dispatch = useDispatch();
     useEffect(() => {
         if (albumList?.length == 0)
             dispatch(getAlbumsActionRequest())
     }, [dispatch])
-    return (<HomeView navigation={navigation} albumList={albumList}/>)
+    const onRefresh = useCallback(() => {
+        dispatch(getAlbumsActionRequest())
+      }, []);
+    return (<HomeView navigation={navigation} onRefresh={onRefresh} loading={loading} albumList={albumList}/>)
 }
 
 export default HomeScreen;
